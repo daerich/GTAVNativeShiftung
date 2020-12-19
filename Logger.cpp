@@ -17,7 +17,7 @@ void Logger::write(std::string content) {
 	std::ofstream writefile;
 	
 	
-	writefile.open(filename, std::ios_base::ios_base::app);
+	writefile.open(filename, std::ios_base::app);
 	
 	writefile << content << std::endl;
 	writefile.close();
