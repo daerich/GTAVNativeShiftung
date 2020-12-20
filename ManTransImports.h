@@ -9,6 +9,7 @@ ALL RIGHTS RESERVED EXCEPT OTHERWISE STATED IN COPYRIGHT.TXT
 namespace MT {
 	extern bool (*isActive)();
 	extern bool (*isNeutral)();
+	extern int (*GetShiftMode)();
 }
 
 bool setupComp();

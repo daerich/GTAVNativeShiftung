@@ -11,6 +11,7 @@ ALL RIGHTS RESERVED EXCEPT OTHERWISE STATED IN COPYRIGHT.TXT
 namespace MT {
 	 bool (*isActive)() = nullptr;
 	 bool (*isNeutral)() = nullptr;
+	 int (*GetShiftMode)() = nullptr;
 
 	HMODULE ModuleHandle = nullptr;
 } 
@@ -41,6 +42,8 @@ bool setupComp() {
 	success &= MT::isActive != nullptr;
 	MT::isNeutral = CheckAddr<bool(*)()>(MT::ModuleHandle, "MT_NeutralGear");
 	success &= MT::isNeutral != nullptr;
+	MT::GetShiftMode = CheckAddr<int(*)()>(MT::ModuleHandle, "MT_GetShiftMode");
+	success &= MT::GetShiftMode != nullptr;
 	
 	logme.write("Succ!(CompInit)");
 	return success;
