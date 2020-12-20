@@ -52,5 +52,6 @@ bool setupComp() {
 void releaseComp() {
 	if (MT::ModuleHandle) {
 		MT::ModuleHandle = nullptr;
+		logme.write("Compatibilty released");
 	}
 }

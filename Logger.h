@@ -10,9 +10,10 @@ class Logger {
 
 private:
 	std::string filename;
+	void DeleteExisting();
 
 public:
-	Logger(std::string file);
+	Logger(std::string file, bool deleteExisting);
 
 	void write(std::string content);
 

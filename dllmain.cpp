@@ -1,4 +1,3 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
 #include <Windows.h>
 #include "inc/main.h"
 #include "mainfunc.h"
@@ -18,6 +17,7 @@ BOOL APIENTRY DllMain(HMODULE hInstance, DWORD reason, LPVOID lpReserved)
 		break;
 	case DLL_PROCESS_DETACH:
 		releaseComp();
+		mainfunc::freeme();
 		scriptUnregister(hInstance);
 		break;
 	}

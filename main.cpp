@@ -14,6 +14,7 @@
 #include <chrono>
 */
 
+
 /* ------------------------------------------
 			COPYRIGHT © DAERICH 2020
 ALL RIGHTS RESERVED EXCEPT OTHERWISE STATED IN COPYRIGHT.TXT
@@ -68,6 +69,12 @@ void mainScript() {
 			}
 		}
 	}
+}
+
+void mainfunc::freeme() {
+	delete _animDict;
+	delete _animName;
+	logme.write("Memory freed");
 }
 
 void ScriptLoop() {
