@@ -1,6 +1,7 @@
 #include "inc/natives.h"
 
 #include "ManTransImports.h"
+#include "DashHook.h"
 #include "mainfunc.h"
 #include "Animations.h"
 
@@ -14,17 +15,17 @@
 #include <chrono>
 */
 
-
 /* ------------------------------------------
 			COPYRIGHT © DAERICH 2020
 ALL RIGHTS RESERVED EXCEPT OTHERWISE STATED IN COPYRIGHT.TXT
    ------------------------------------------ */
 
 
-
 static bool setupSuccess;
+static bool DashSetupSucces;
 
 void setUp() {
+	DashSetupSucces = setupDash();
 	setupSuccess = setupComp();		//make compatible
 #pragma warning(suppress : 4996)
 	strcpy(mainfunc::_animDict, inivalues::inianimDict.c_str());
@@ -71,6 +72,26 @@ void mainScript() {
 	}
 }
 
+void DashLogic(){
+	if (DashSetupSucces && inivalues::iniDashEnabled) {
+		Player player = PLAYER::PLAYER_ID();
+		Ped playerPD = PLAYER::GET_PLAYER_PED(player);
+		Vehicle currentVehicle = PED::GET_VEHICLE_PED_IS_IN(playerPD, false);
+
+		if (!ENTITY::DOES_ENTITY_EXIST(currentVehicle)) {
+			return;
+		}
+		if (VEHICLE::GET_VEHICLE_ENGINE_HEALTH(currentVehicle) <= 950.0f) {
+			DashHook::VehicleDashboardData data = DashHook::VehicleDashboardData();
+			DashHook::DashHook_GetData(&data);
+			data.engineLight = true;
+			data.oilLight = true;
+			DashHook::DashHook_SetData(data);
+		}
+	}
+
+}
+
 void mainfunc::freeme() {
 	delete _animDict;
 	delete _animName;
@@ -81,6 +102,7 @@ void ScriptLoop() {
 	setUp();
 	while (true) {
 		mainScript();
+		DashLogic();
 		WAIT(0);
 	}
 }

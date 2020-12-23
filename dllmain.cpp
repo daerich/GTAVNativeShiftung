@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "inc/main.h"
 #include "mainfunc.h"
+#include "DashHook.h"
 #include "ManTransImports.h"
 
 /* ------------------------------------------
@@ -17,6 +18,7 @@ BOOL APIENTRY DllMain(HMODULE hInstance, DWORD reason, LPVOID lpReserved)
 		break;
 	case DLL_PROCESS_DETACH:
 		releaseComp();
+		releaseDash();
 		mainfunc::freeme();
 		scriptUnregister(hInstance);
 		break;

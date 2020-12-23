@@ -14,6 +14,8 @@ const char* const _inianimDict = shiftingini.GetValue("Main", "AnimationDictiona
 
 const char* const _inianimName = shiftingini.GetValue("Main", "AnimationName", "outro_0");
 
+bool inivalues::iniDashEnabled = shiftingini.GetBoolValue("DashHook", "isEnabled", false);
+
 const std::string inivalues::inianimDict = std::string(_inianimDict);
 const std::string inivalues::inianimName = std::string(_inianimName);
 

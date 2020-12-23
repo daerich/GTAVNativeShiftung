@@ -10,5 +10,6 @@ ALL RIGHTS RESERVED EXCEPT OTHERWISE STATED IN COPYRIGHT.TXT
 namespace inivalues {
 	extern const std::string inianimDict;
 	extern const std::string inianimName;
+	extern bool iniDashEnabled;
 }
 

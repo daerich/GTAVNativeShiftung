@@ -1,4 +1,5 @@
 #include "ManTransImports.h"
+#include "DashHook.h"
 #include <Windows.h>
 #include <string>
 #include "Logger.h"
@@ -15,6 +16,13 @@ namespace MT {
 
 	HMODULE ModuleHandle = nullptr;
 } 
+
+namespace DashHook {
+	bool DashAsLib = false;
+	void (*DashHook_GetData)(VehicleDashboardData*) = nullptr;
+	void (*DashHook_SetData)(VehicleDashboardData) = nullptr;
+	HMODULE DashHandle = nullptr;
+}
 
 
 template<typename T>
@@ -34,7 +42,7 @@ bool setupComp() {
 	MT::ModuleHandle = GetModuleHandle(L"Gears.asi");
 
 	if (!MT::ModuleHandle) {
-		logme.write("Me not finding module handle!");
+		logme.write("[MT]Me not finding module handle!");
 		return false;
 	}
 
@@ -45,8 +53,53 @@ bool setupComp() {
 	MT::GetShiftMode = CheckAddr<int(*)()>(MT::ModuleHandle, "MT_GetShiftMode");
 	success &= MT::GetShiftMode != nullptr;
 	
-	logme.write("Succ!(CompInit)");
 	return success;
+}
+
+bool setupDash() {
+	bool success = true;
+
+
+	DashHook::DashHandle = GetModuleHandle(L"DashHook.dll");
+	if (!DashHook::DashHandle) {
+		DashHook::DashHandle = LoadLibrary(L"DashHook.dll");
+		if (!DashHook::DashHandle) {
+			logme.write("[DH] Could not find Library!");
+			return false;
+		}
+		logme.write("[DH] Loaded as Lib!");
+		DashHook::DashAsLib = true;
+	}
+	if (DashHook::DashHandle) {
+		DashHook::DashHook_SetData = CheckAddr<void(*)(DashHook::VehicleDashboardData)>(DashHook::DashHandle, "DashHook_SetData");
+		success &= DashHook::DashHook_SetData != nullptr;
+		DashHook::DashHook_GetData = CheckAddr<void(*)(DashHook::VehicleDashboardData*)>(DashHook::DashHandle, "DashHook_GetData");
+		success &= DashHook::DashHook_GetData != nullptr;
+	}
+	if (success) {
+		logme.write("[DH] Successful DashHook Setup");
+		return true;
+	}
+	return false;
+}
+
+void releaseDash() {
+	if (DashHook::DashHandle) {
+		if (DashHook::DashAsLib) {
+			if (FreeLibrary(DashHook::DashHandle)) {
+				DashHook::DashHandle = nullptr;
+				logme.write("[DH] LibraryFreed");
+			}
+			else {
+				logme.write("[DH]Could not free Library");
+			}
+		}
+		else {
+			DashHook::DashHandle = nullptr;
+			logme.write("[DH]Handle reset");
+		}
+	}
+
 }
 
 void releaseComp() {
