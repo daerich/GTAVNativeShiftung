@@ -9,17 +9,10 @@
 #include "Logger.h"
 #include "iniValues.h"
 
-
-/*
-#include <ctime>
-#include <chrono>
-*/
-
 /* ------------------------------------------
 			COPYRIGHT © DAERICH 2020
 ALL RIGHTS RESERVED EXCEPT OTHERWISE STATED IN COPYRIGHT.TXT
    ------------------------------------------ */
-
 
 static bool setupSuccess;
 static bool DashSetupSucces;
@@ -39,9 +32,9 @@ static bool isActive = false;
 void mainScript() {
 
 	if (setupSuccess) {;
-		Player player = PLAYER::PLAYER_ID();
-		Ped playerPD = PLAYER::GET_PLAYER_PED(player);
-		Vehicle currentVehicle = PED::GET_VEHICLE_PED_IS_IN(playerPD, false);
+		Player player(PLAYER::PLAYER_ID());
+		Ped playerPD(PLAYER::GET_PLAYER_PED(player));
+		Vehicle currentVehicle(PED::GET_VEHICLE_PED_IS_IN(playerPD, false));
 
 		if (!ENTITY::DOES_ENTITY_EXIST(currentVehicle)) {
 			return;
@@ -52,7 +45,6 @@ void mainScript() {
 
 
 			STREAMING::REQUEST_ANIM_DICT(mainfunc::_animDict);
-			//time_t endtime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) + 10000LL);
 
 			while (!STREAMING::HAS_ANIM_DICT_LOADED(mainfunc::_animDict)) {
 				WAIT(0);
@@ -74,15 +66,15 @@ void mainScript() {
 
 void DashLogic(){
 	if (DashSetupSucces && inivalues::iniDashEnabled) {
-		Player player = PLAYER::PLAYER_ID();
-		Ped playerPD = PLAYER::GET_PLAYER_PED(player);
-		Vehicle currentVehicle = PED::GET_VEHICLE_PED_IS_IN(playerPD, false);
+		Player player(PLAYER::PLAYER_ID());
+		Ped playerPD(PLAYER::GET_PLAYER_PED(player));
+		Vehicle currentVehicle(PED::GET_VEHICLE_PED_IS_IN(playerPD, false));
 
 		if (!ENTITY::DOES_ENTITY_EXIST(currentVehicle)) {
 			return;
 		}
 		if (VEHICLE::GET_VEHICLE_ENGINE_HEALTH(currentVehicle) <= 950.0f) {
-			DashHook::VehicleDashboardData data = DashHook::VehicleDashboardData();
+			DashHook::VehicleDashboardData data;
 			DashHook::DashHook_GetData(&data);
 			data.engineLight = true;
 			data.oilLight = true;

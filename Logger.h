@@ -13,9 +13,9 @@ private:
 	void DeleteExisting();
 
 public:
-	Logger(std::string file, bool deleteExisting);
+	Logger(std::string, bool);
 
-	void write(std::string content);
+	void write(std::string);
 
 };
 

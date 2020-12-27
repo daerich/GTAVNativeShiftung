@@ -8,8 +8,6 @@
 ALL RIGHTS RESERVED EXCEPT OTHERWISE STATED IN COPYRIGHT.TXT
    ------------------------------------------ */
 
-
-
 Logger::Logger(std::string file, bool deleteExisting = false) {
 	filename = file;
 	if (deleteExisting) {
@@ -18,7 +16,7 @@ Logger::Logger(std::string file, bool deleteExisting = false) {
 }
 
 void Logger::DeleteExisting() {
-	std::ofstream tobd = std::ofstream(filename);
+	std::ofstream tobd(filename);
 	if (tobd.good()) {
 		DeleteFileA(filename.c_str());
 	}
